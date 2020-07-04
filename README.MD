@@ -52,10 +52,25 @@ Supports operations:
 * Get all player with pagination (offset, limit)
 * Delete player
 
+Endpoints:
+* POST   /players
+* GET    /players/{id}
+* GET    /players?offset=0&limit=100
+* DELETE /player/{id}
+
+### Requirements
+* Go
+* Docker
+* Docker Compose
+* Terminal
 
 For run this project:
 ```shell
     git clone https://github.com/ArturMartini/go-demo-mongodb.git
-    
+    cd go-demo-mongodb
+    go run main.go
+    sh data.sh
 ```
+
+Now you can explore the endpoints
 
