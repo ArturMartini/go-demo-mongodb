@@ -17,6 +17,8 @@ type Repository interface {
 	Get(id string) (canonical.Player, error)
 	GetAll(offset int, limit int) ([]canonical.Player, error)
 	Delete(id string) error
+	Upload(id string, bin []byte) error
+	Download(id string) ([]byte, error)
 }
 
 type repository struct {
@@ -25,6 +27,10 @@ type repository struct {
 
 type HexId struct {
 	ID primitive.ObjectID `bson:"_id"`
+}
+
+type Image struct {
+	Data []byte `bson:"data"`
 }
 
 const database = "test"
@@ -103,7 +109,6 @@ func (r repository) GetAll(offset int, limit int) ([]canonical.Player, error) {
 	cur, err := r.client.Database(database).Collection("players").
 		Find(ctx, bson.D{}, findOptions)
 
-
 	if err != nil {
 		return players, err
 	}
@@ -112,7 +117,6 @@ func (r repository) GetAll(offset int, limit int) ([]canonical.Player, error) {
 	for cur.Next(context.TODO()) {
 		var p canonical.Player
 		hex := HexId{}
-
 
 		cur.Decode(&hex)
 		err := cur.Decode(&p)
@@ -137,4 +141,76 @@ func (r repository) Delete(id string) error {
 	_, err := r.client.Database(database).Collection("players").
 		DeleteOne(context.Background(), bson.M{"_id": objId})
 	return err
+}
+
+func (r repository) Upload(id string, bin []byte) error {
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return err
+	}
+
+	img := Image{
+		Data: bin,
+	}
+
+	player := canonical.Player{}
+
+	r.client.Database(database).Collection("players").
+		FindOne(context.Background(), bson.M{"_id": objId}).Decode(&player)
+
+	if player.ImgId == "" {
+		result, err := r.client.Database(database).Collection("images").
+			InsertOne(context.Background(), &img)
+		if err != nil {
+			return err
+		}
+
+		imgId := ""
+		if oid, ok := result.InsertedID.(primitive.ObjectID); ok {
+			imgId = oid.Hex()
+		}
+
+		_, err = r.client.Database(database).Collection("players").
+			UpdateOne(context.Background(), bson.M{"_id": objId}, bson.D{{Key: "$set", Value: bson.M{"imgid": imgId}}})
+		if err != nil {
+			return err
+		}
+
+	} else {
+
+		imgObjId, err := primitive.ObjectIDFromHex(player.ImgId)
+		if err != nil {
+			return err
+		}
+		_, err = r.client.Database(database).Collection("images").
+			UpdateOne(context.Background(), bson.M{"_id": imgObjId}, bson.D{{Key: "$set", Value: bson.M{"data": bin}}})
+	}
+
+	return err
+}
+
+func (r repository) Download(id string) ([]byte, error) {
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+
+	player := canonical.Player{}
+
+	err = r.client.Database(database).Collection("players").
+		FindOne(context.Background(), bson.M{"_id": objId}).Decode(&player)
+	if err != nil {
+		return nil, err
+	}
+
+	imgId, err := primitive.ObjectIDFromHex(player.ImgId)
+	if err != nil {
+		return nil, err
+	}
+
+	img := Image{}
+	err = r.client.Database(database).Collection("images").
+		FindOne(context.Background(), bson.M{"_id": imgId}).Decode(&img)
+
+	return img.Data, err
 }

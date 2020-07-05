@@ -7,8 +7,7 @@
         "genre": "male",
         "ranting": 4.7,
         "country": "PRT",
-        "url": "https://www.youtube.com/watch?v=u5LpWA_BDSE",
-        "img": "https://tmssl.akamaized.net/images/portrait/originals/8198-1568120625.jpg"
+        "url": "https://www.youtube.com/watch?v=u5LpWA_BDSE"
     },
     {
         "name": "Ronaldinho",
@@ -18,8 +17,7 @@
         "genre": "male",
         "ranting": 4.9,
         "country": "BRA",
-        "url": "https://www.youtube.com/watch?v=_dBz4dTZocg",
-        "img": "https://www.ibahia.com/fileadmin/user_upload/ibahia/2020/marco/06/ronaldinho112.jpg"
+        "url": "https://www.youtube.com/watch?v=_dBz4dTZocg"
     },
     {
         "name": "Neymar",
@@ -29,8 +27,7 @@
         "genre": "male",
         "ranting": 4.5,
         "country": "BRA",
-        "url": "https://www.youtube.com/watch?v=6c4bzF1_-Ms",
-        "img": "https://upload.wikimedia.org/wikipedia/commons/6/65/20180610_FIFA_Friendly_Match_Austria_vs._Brazil_Neymar_850_1705.jpg"
+        "url": "https://www.youtube.com/watch?v=6c4bzF1_-Ms"
     },
     {
         "name": "Messi",
@@ -40,8 +37,7 @@
         "genre": "male",
         "ranting": 4.5,
         "country": "ARG",
-        "url": "https://www.youtube.com/watch?v=6c4bzF1_-Ms",
-        "img": "https://upload.wikimedia.org/wikipedia/commons/6/65/20180610_FIFA_Friendly_Match_Austria_vs._Brazil_Neymar_850_1705.jpg"
+        "url": "https://www.youtube.com/watch?v=6c4bzF1_-Ms"
     },
     {
         "name": "Messi",
@@ -51,7 +47,6 @@
         "genre": "male",
         "ranting": 4.5,
         "country": "URY",
-        "url": "https://www.youtube.com/watch?v=6c4bzF1_-Ms",
-        "img": "https://upload.wikimedia.org/wikipedia/commons/6/65/20180610_FIFA_Friendly_Match_Austria_vs._Brazil_Neymar_850_1705.jpg"
+        "url": "https://www.youtube.com/watch?v=6c4bzF1_-Ms"
     }
 ]

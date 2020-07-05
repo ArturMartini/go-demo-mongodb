@@ -25,7 +25,51 @@ func Start() error {
 	router.HandleFunc("/players", getAllPlayers).Methods(http.MethodGet)
 	router.HandleFunc("/players/{id}", updatePlater).Methods(http.MethodPut)
 	router.HandleFunc("/players/{id}", deletePlayer).Methods(http.MethodDelete)
+	router.HandleFunc("/players/{id}/images", uploadImage).Methods(http.MethodPost)
+	router.HandleFunc("/players/{id}/images", downloadImage).Methods(http.MethodGet)
 	return http.ListenAndServe(":8080", router)
+}
+
+func downloadImage(w http.ResponseWriter, r *http.Request) {
+	id := mux.Vars(r)["id"]
+	bin, err := svc.Download(id)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+	}
+
+	w.Write(bin)
+	w.WriteHeader(http.StatusOK)
+}
+
+func uploadImage(w http.ResponseWriter, r *http.Request) {
+	file, header, err := r.FormFile("image")
+	defer file.Close()
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	if header.Size > (1024 * 50) {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("{\"message\": \"The file size is greater than 500kb\"}"))
+	}
+
+	bin, err := ioutil.ReadAll(file)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	id := mux.Vars(r)["id"]
+
+	err = svc.Upload(id, bin)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
 }
 
 func addPlayer(w http.ResponseWriter, r *http.Request) {

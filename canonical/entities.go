@@ -10,5 +10,5 @@ type Player struct {
 	Rating   float64 `json:"rating,omitempty"`
 	Country  string  `json:"country,omitempty"`
 	Url      string  `json:"url,omitempty"`
-	Img      string  `json:"img,omitempty"`
+	ImgId   string   `json:"img_id,omitempty"`
 }

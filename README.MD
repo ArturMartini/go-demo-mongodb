@@ -13,8 +13,7 @@ For simulate a scenario, we have a register players with schema bellow
     "genre": "male",
     "rating": 4.9,
     "country": "BRA",
-    "url": "https://your-url.com",
-    "img": "https://your-img-url.com"
+    "url": "https://your-url.com"
 }
 ```
 Using MongoDB in docker-compose
@@ -51,12 +50,16 @@ Supports operations:
 * Get all players
 * Get all player with pagination (offset, limit)
 * Delete player
+* Upload image player
+* Download image player
 
 Endpoints:
 * POST   /players
 * GET    /players/{id}
 * GET    /players?offset=0&limit=100
-* DELETE /player/{id}
+* DELETE /players/{id}
+* POST   /players/{id}/images
+* GET    /players/{id}/images
 
 ### Requirements
 * Go
